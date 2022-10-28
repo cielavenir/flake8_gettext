@@ -31,7 +31,7 @@ class GettextChecker(object):
                 continue
             if type(node.args[0]) == BinOp or (isinstance(node.args[0], Call) and isinstance(node.args[0].func, Attribute) and node.args[0].func.attr == 'format'):
                 yield node.lineno, node.col_offset, GT010, type(self)
-            elif JoinedStr is not None and isinstance(node.args[0], JoinedStr):
+            elif JoinedStr is not None and isinstance(node.args[0], JoinedStr):  # Py3
                 yield node.lineno, node.col_offset, GT011, type(self)
             else:
                 if len(node.args) == 1 and isinstance(node.args[0], Str):

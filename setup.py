@@ -12,7 +12,7 @@ setup(
     long_description_content_type='text/markdown',
     version=versionContext['__version__'],
     url='https://github.com/cielavenir/flake8_gettext',
-    license='BSD0',
+    license='0BSD',
     author='cielavenir',
     author_email='cielartisan@gmail.com',
     packages=['flake8_gettext'],
