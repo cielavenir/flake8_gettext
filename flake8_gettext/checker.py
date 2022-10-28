@@ -7,6 +7,7 @@ except ImportError:
     JoinedStr = None
 
 GT010 = "GT010 the gettext's argument contains operators or 'format'."
+GT011 = "GT011 the gettext's argument is a fstring."
 GT012 = "GT012 the gettext's argument is not single string."
 
 class GettextChecker(object):
@@ -20,9 +21,11 @@ class GettextChecker(object):
         for node in walk(self.tree):
             if not isinstance(node, Call):
                 continue
-            if not isinstance(node.func, Name):
-                continue
-            if node.func.id not in ('_', 'gettext', 'ugettext', 'ngettext', 'ungettext'):
+            if isinstance(node.func, Name) and node.func.id in ('_', 'gettext', 'ugettext', 'ngettext', 'ungettext'):
+                pass
+            elif isinstance(node.func, Attribute) and isinstance(node.func.value, Name) and node.func.value.id == 'gettext' and node.func.attr in ('_', 'gettext', 'ugettext', 'ngettext', 'ungettext'):
+                pass
+            else:
                 continue
             if len(node.args) == 0:
                 continue
