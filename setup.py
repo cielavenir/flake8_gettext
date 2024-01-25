@@ -7,7 +7,7 @@ import sys
 
 setup(
     name='flake8_gettext',
-    description='flake8_gettext',
+    description='flake8 plugin to warn the wrong arguments for gettext',
     long_description=open("README.md").read(),
     long_description_content_type='text/markdown',
     version=versionContext['__version__'],
