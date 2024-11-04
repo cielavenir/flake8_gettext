@@ -8,7 +8,8 @@ except ImportError:
 
 GT010 = "GT010 the gettext's argument contains operators or 'format'."
 GT011 = "GT011 the gettext's argument is a fstring."
-GT012 = "GT012 the gettext's argument is not single string."
+GT012 = "GT012 the gettext's argument is not a single string."
+GT020 = "GT020 the gettext's argument is a single string, but it is empty."
 
 class GettextChecker(object):
     name = 'flake8_gettext'
@@ -34,6 +35,13 @@ class GettextChecker(object):
             elif JoinedStr is not None and isinstance(node.args[0], JoinedStr):  # Py3
                 yield node.lineno, node.col_offset, GT011, type(self)
             else:
-                if len(node.args) == 1 and isinstance(node.args[0], Str):
-                    continue
-                yield node.lineno, node.col_offset, GT012, type(self)
+                if isinstance(node.args[0], Str):
+                    if node.args[0].value == '':
+                        yield node.lineno, node.col_offset, GT020, type(self)
+                    elif node.func.id in ('ngettext', 'ungettext'):
+                        # skip len(arguments) == 1 check for ngettext
+                        continue
+                    elif len(node.args) == 1:
+                        continue
+                else:
+                    yield node.lineno, node.col_offset, GT012, type(self)
